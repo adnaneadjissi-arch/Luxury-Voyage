@@ -4,7 +4,7 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0">
-        <img src="https://picsum.photos/seed/luxury-ocean-yacht/1920/1080.jpg" alt="" className="w-full h-full object-cover" />
+        <img src="https://images.unsplash.com/photo-1590523278191-995cbcda646b?w=1920&q=80" alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-dark-900/60 via-dark-900/30 to-dark-900" />
       </div>
 

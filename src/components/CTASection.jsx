@@ -6,7 +6,7 @@ export default function CTASection() {
   return (
     <section id="book" className="relative py-36 md:py-48 overflow-hidden">
       <div className="absolute inset-0">
-        <img src="https://picsum.photos/seed/luxury-pool-sunset/1920/900.jpg" alt="" className="w-full h-full object-cover" />
+        <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1920&q=80" alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-dark-900/90 backdrop-blur-[2px]" />
       </div>
 

@@ -6,6 +6,7 @@ import Stats from './components/Stats';
 import Process from './components/Process';
 import Testimonial from './components/Testimonial';
 import CTASection from './components/CTASection';
+import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
       <Process />
       <Testimonial />
       <CTASection />
+      <ContactSection />
       <Footer />
     </div>
   );

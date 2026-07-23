@@ -1,9 +1,11 @@
 -- ============================================================
--- Luxury Voyage — إعداد جدول الحجوزات في Supabase
+-- Luxury Voyage — إعداد قاعدة البيانات في Supabase
 -- شغّل هذا الملف كاملاً داخل: Supabase Dashboard -> SQL Editor -> New Query -> Run
+-- هذا الملف آمن لإعادة التشغيل أي عدد من المرات (Idempotent)
+-- لن يحذف أي بيانات موجودة، وسيتخطى ما هو موجود بالفعل بدل أن يفشل
 -- ============================================================
 
--- 1) إنشاء جدول الحجوزات
+-- 1) جدول الحجوزات
 create table if not exists public.bookings (
   id uuid primary key default gen_random_uuid(),
   full_name text not null,
@@ -14,25 +16,40 @@ create table if not exists public.bookings (
   created_at timestamptz not null default now()
 );
 
--- 2) تفعيل الحماية على مستوى الصفوف (Row Level Security)
--- بدون هذا، أي شخص يملك مفتاحك العام يمكنه قراءة كل الحجوزات مباشرة من المتصفح
 alter table public.bookings enable row level security;
 
--- 3) سياسة تسمح لأي زائر (حتى بدون تسجيل دخول) بإضافة حجز جديد فقط
--- هذا مناسب لأن نموذج الحجز في الموقع متاح للعامة
+-- نحذف السياسة القديمة أولاً إن كانت موجودة، ثم نعيد إنشاءها
+-- هذا يمنع خطأ "policy already exists" عند تشغيل الملف أكثر من مرة
+drop policy if exists "Anyone can submit a booking" on public.bookings;
 create policy "Anyone can submit a booking"
   on public.bookings
   for insert
   to anon
   with check (true);
 
--- 4) لا نضيف أي سياسة SELECT/UPDATE/DELETE للزوار
--- هذا يعني: لا أحد يستطيع قراءة أو تعديل أو حذف الحجوزات من المتصفح
--- أنت فقط (عبر Table Editor في لوحة Supabase، أو مفتاح service_role السري)
--- تستطيع رؤية وإدارة البيانات — وهذا هو التصرف الآمن الصحيح
+-- ============================================================
+-- 2) جدول رسائل التواصل العام (Contact Form)
+-- منفصل عن الحجوزات: للأسئلة العامة غير المرتبطة بحجز محدد
+-- ============================================================
+create table if not exists public.contacts (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  email text not null,
+  message text not null,
+  created_at timestamptz not null default now()
+);
+
+alter table public.contacts enable row level security;
+
+drop policy if exists "Anyone can submit a contact message" on public.contacts;
+create policy "Anyone can submit a contact message"
+  on public.contacts
+  for insert
+  to anon
+  with check (true);
 
 -- ============================================================
--- ملاحظة مهمة: بعد تشغيل هذا الملف، تحقق من:
--- Authentication -> Policies -> bookings
--- يجب أن ترى سياسة واحدة فقط باسم "Anyone can submit a booking"
+-- ملاحظة: لا توجد سياسة SELECT/UPDATE/DELETE للزوار في أي من الجدولين
+-- هذا يعني: لا أحد يستطيع قراءة أو تعديل أو حذف البيانات من المتصفح
+-- أنت فقط (عبر Table Editor في لوحة Supabase) تستطيع رؤية وإدارة البيانات
 -- ============================================================
