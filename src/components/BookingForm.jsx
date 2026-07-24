@@ -16,13 +16,13 @@ export default function BookingForm() {
     e.preventDefault();
     if (!form.name || !form.email) {
       setStatus('error');
-      setErrorMsg('الاسم والبريد الإلكتروني مطلوبان.');
+      setErrorMsg('Name and email are required.');
       return;
     }
 
     if (!isSupabaseConfigured) {
       setStatus('error');
-      setErrorMsg('لم يتم ربط Supabase بعد. راجع خطوة "ب" و"ج" في README لإضافة المفاتيح.');
+      setErrorMsg('Supabase is not connected yet. See steps "B" and "C" in the README to add your keys.');
       return;
     }
 
@@ -40,7 +40,7 @@ export default function BookingForm() {
     if (error) {
       console.error(error);
       setStatus('error');
-      setErrorMsg('حدث خطأ أثناء الإرسال. حاول مجدداً أو تواصل معنا مباشرة عبر الهاتف.');
+      setErrorMsg('Something went wrong while sending your request. Please try again or contact us directly by phone.');
       return;
     }
 
@@ -54,9 +54,9 @@ export default function BookingForm() {
         <div className="w-14 h-14 rounded-full border border-gold-500 flex items-center justify-center mx-auto mb-6">
           <SvgIcon name="check" size={24} className="text-gold-500" />
         </div>
-        <h3 className="font-display text-2xl mb-3 text-white">تم استلام طلبك</h3>
+        <h3 className="font-display text-2xl mb-3 text-white">Request Received</h3>
         <p className="text-gray-400 text-sm leading-relaxed">
-          سيتواصل معك فريق الكونسيرج قريباً لبدء تصميم رحلتك.
+          Our concierge team will be in touch shortly to start designing your trip.
         </p>
       </div>
     );
@@ -68,12 +68,12 @@ export default function BookingForm() {
         <div className="grid sm:grid-cols-2 gap-5">
           <input
             name="name" value={form.name} onChange={handleChange}
-            placeholder="الاسم الكامل *"
+            placeholder="Full Name *"
             className="bg-dark-700 border border-white/10 focus:border-gold-500 outline-none px-5 py-3.5 text-sm text-white placeholder:text-gray-500 transition-colors duration-300"
           />
           <input
             name="email" type="email" value={form.email} onChange={handleChange}
-            placeholder="البريد الإلكتروني *"
+            placeholder="Email Address *"
             className="bg-dark-700 border border-white/10 focus:border-gold-500 outline-none px-5 py-3.5 text-sm text-white placeholder:text-gray-500 transition-colors duration-300"
           />
         </div>
@@ -82,12 +82,12 @@ export default function BookingForm() {
         <div className="grid sm:grid-cols-2 gap-5">
           <input
             name="phone" value={form.phone} onChange={handleChange}
-            placeholder="رقم الهاتف"
+            placeholder="Phone Number"
             className="bg-dark-700 border border-white/10 focus:border-gold-500 outline-none px-5 py-3.5 text-sm text-white placeholder:text-gray-500 transition-colors duration-300"
           />
           <input
             name="destination" value={form.destination} onChange={handleChange}
-            placeholder="الوجهة المرغوبة"
+            placeholder="Preferred Destination"
             className="bg-dark-700 border border-white/10 focus:border-gold-500 outline-none px-5 py-3.5 text-sm text-white placeholder:text-gray-500 transition-colors duration-300"
           />
         </div>
@@ -95,7 +95,7 @@ export default function BookingForm() {
       <FadeIn delay={0.1}>
         <textarea
           name="message" value={form.message} onChange={handleChange}
-          placeholder="أخبرنا عن رحلة أحلامك..." rows={4}
+          placeholder="Tell us about your dream trip..." rows={4}
           className="w-full bg-dark-700 border border-white/10 focus:border-gold-500 outline-none px-5 py-3.5 text-sm text-white placeholder:text-gray-500 transition-colors duration-300 resize-none"
         />
       </FadeIn>
@@ -110,7 +110,7 @@ export default function BookingForm() {
           disabled={status === 'loading'}
           className="w-full inline-flex items-center justify-center gap-3 px-12 py-4 bg-gold-500 text-dark-900 text-sm tracking-[.2em] font-medium hover:bg-gold-300 transition-all duration-500 btn-shine btn-glow luxury-ease disabled:opacity-60"
         >
-          {status === 'loading' ? 'جاري الإرسال...' : 'أرسل الطلب'}
+          {status === 'loading' ? 'Sending...' : 'Send Request'}
         </button>
       </FadeIn>
     </form>

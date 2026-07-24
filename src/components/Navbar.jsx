@@ -11,7 +11,7 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', h);
   }, []);
 
-  // نمنع تمرير الصفحة الخلفية عندما تكون القائمة الجانبية مفتوحة
+  // Lock background scroll while the side menu is open
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -44,25 +44,25 @@ export default function Navbar() {
             </a>
           </div>
 
-          <button onClick={() => setOpen(true)} className="lg:hidden text-white p-2 relative z-[60]" aria-label="فتح القائمة">
+          <button onClick={() => setOpen(true)} className="lg:hidden text-white p-2 relative z-[60]" aria-label="Open menu">
             <SvgIcon name="menu" size={22} />
           </button>
         </div>
       </nav>
 
-      {/* الخلفية المعتمة خلف القائمة الجانبية */}
+      {/* Dimmed backdrop behind the side menu */}
       <div
         onClick={() => setOpen(false)}
         className={`lg:hidden fixed inset-0 z-[70] bg-dark-900/70 backdrop-blur-sm transition-opacity duration-500 luxury-ease ${
           open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
       />
 
-      {/* القائمة المنزلقة من اليمين */}
+      {/* Slide-in menu from the right */}
       <div className={`lg:hidden fixed top-0 right-0 h-full w-[78%] max-w-xs z-[80] bg-dark-800 border-l border-gold-500/10 shadow-2xl transition-transform duration-500 luxury-ease ${
         open ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex items-center justify-between px-6 h-20 border-b border-white/5">
           <span className="text-[13px] tracking-[.3em] font-light text-white">MENU</span>
-          <button onClick={() => setOpen(false)} className="text-white p-2" aria-label="إغلاق القائمة">
+          <button onClick={() => setOpen(false)} className="text-white p-2" aria-label="Close menu">
             <SvgIcon name="x" size={20} />
           </button>
         </div>

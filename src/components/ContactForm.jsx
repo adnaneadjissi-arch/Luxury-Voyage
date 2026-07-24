@@ -5,10 +5,10 @@ import { FadeIn } from '../hooks';
 
 function validate(form) {
   const errors = {};
-  if (!form.name || form.name.trim().length < 2) errors.name = 'الاسم يجب أن يكون حرفين على الأقل.';
+  if (!form.name || form.name.trim().length < 2) errors.name = 'Name must be at least 2 characters.';
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRe.test(form.email || '')) errors.email = 'بريد إلكتروني غير صالح.';
-  if (!form.message || form.message.trim().length < 10) errors.message = 'الرسالة يجب أن تكون 10 أحرف على الأقل.';
+  if (!emailRe.test(form.email || '')) errors.email = 'Please enter a valid email address.';
+  if (!form.message || form.message.trim().length < 10) errors.message = 'Message must be at least 10 characters.';
   return errors;
 }
 
@@ -34,10 +34,10 @@ export default function ContactForm() {
     setStatus('loading');
     setErrorMsg('');
 
-    // إن لم يكن Supabase مضبوطاً بعد، نسجّل البيانات في الـ Console
-    // ونظهر واجهة النجاح، حتى لا يتعطل النموذج أثناء التطوير المحلي
+    // If Supabase isn't configured yet, log the data to the console
+    // and show the success UI so the form doesn't break during local development
     if (!isSupabaseConfigured) {
-      console.log('[ContactForm] Supabase غير مُعَد — بيانات النموذج:', form);
+      console.log('[ContactForm] Supabase is not configured — form data:', form);
       setStatus('success');
       setForm({ name: '', email: '', message: '' });
       return;
@@ -52,7 +52,7 @@ export default function ContactForm() {
     if (error) {
       console.error(error);
       setStatus('error');
-      setErrorMsg('حدث خطأ أثناء إرسال رسالتك. حاول مجدداً لاحقاً.');
+      setErrorMsg('Something went wrong sending your message. Please try again later.');
       return;
     }
 
@@ -66,10 +66,10 @@ export default function ContactForm() {
         <div className="w-14 h-14 rounded-full border border-gold-500 flex items-center justify-center mx-auto mb-6">
           <SvgIcon name="check" size={24} className="text-gold-500" />
         </div>
-        <h3 className="font-display text-2xl mb-3 text-white">تم إرسال رسالتك</h3>
-        <p className="text-gray-400 text-sm leading-relaxed">سيرد عليك فريقنا في أقرب وقت ممكن.</p>
+        <h3 className="font-display text-2xl mb-3 text-white">Message Sent</h3>
+        <p className="text-gray-400 text-sm leading-relaxed">Our team will get back to you as soon as possible.</p>
         <button onClick={() => setStatus('idle')} className="mt-6 text-gold-500 text-xs tracking-widest hover:text-gold-300 transition-colors">
-          إرسال رسالة أخرى
+          Send another message
         </button>
       </div>
     );
@@ -81,7 +81,7 @@ export default function ContactForm() {
         <div>
           <input
             name="name" value={form.name} onChange={handleChange}
-            placeholder="الاسم الكامل"
+            placeholder="Full Name"
             className={`w-full bg-dark-700 border outline-none px-5 py-3.5 text-sm text-white placeholder:text-gray-500 transition-colors duration-300 ${
               fieldErrors.name ? 'border-red-500/60' : 'border-white/10 focus:border-gold-500'}`}
           />
@@ -92,7 +92,7 @@ export default function ContactForm() {
         <div>
           <input
             name="email" type="email" value={form.email} onChange={handleChange}
-            placeholder="البريد الإلكتروني"
+            placeholder="Email Address"
             className={`w-full bg-dark-700 border outline-none px-5 py-3.5 text-sm text-white placeholder:text-gray-500 transition-colors duration-300 ${
               fieldErrors.email ? 'border-red-500/60' : 'border-white/10 focus:border-gold-500'}`}
           />
@@ -103,7 +103,7 @@ export default function ContactForm() {
         <div>
           <textarea
             name="message" value={form.message} onChange={handleChange}
-            placeholder="رسالتك..." rows={4}
+            placeholder="Your message..." rows={4}
             className={`w-full bg-dark-700 border outline-none px-5 py-3.5 text-sm text-white placeholder:text-gray-500 transition-colors duration-300 resize-none ${
               fieldErrors.message ? 'border-red-500/60' : 'border-white/10 focus:border-gold-500'}`}
           />
@@ -119,7 +119,7 @@ export default function ContactForm() {
           disabled={status === 'loading'}
           className="w-full inline-flex items-center justify-center gap-3 px-12 py-4 bg-gold-500 text-dark-900 text-sm tracking-[.2em] font-medium hover:bg-gold-300 transition-all duration-500 btn-shine btn-glow luxury-ease disabled:opacity-60"
         >
-          {status === 'loading' ? 'جاري الإرسال...' : 'إرسال الرسالة'}
+          {status === 'loading' ? 'Sending...' : 'Send Message'}
         </button>
       </FadeIn>
     </form>
